@@ -1,11 +1,14 @@
 ---
 title: "Lab 05 - La Quinta is Spanish for next to Denny's, Pt. 2"
-author: "Insert your name here"
-date: "Insert date here"
+author: "George Nesbitt"
+date: "02/13/2026"
 output: github_document
 ---
 
 ### Load packages and data
+
+
+
 
 ```{r load-packages, message = FALSE}
 library(tidyverse) 
@@ -18,32 +21,81 @@ states <- read_csv("data/states.csv")
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r}
+dn_ak <- dennys %>%
+  filter(state == "AK")
+nrow(dn_ak)
+```
+```{r}
+lq_ak <- laquinta %>%
+  filter(state == "AK")
+nrow(lq_ak)
+```
+
+There are three Denny's in Alaska and two LaQuintas
 
 ### Exercise 2
+We need to calculate six distances because there are three Denny's and two LaQuintas (3*2)=6
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
 
 ### Exercise 3
+```{r}
+dn_lq_ak <- full_join(dn_ak, lq_ak,
+  by = "state"
+)
+dn_lq_ak
+```
 
-...
 
 ### Exercise 4
-
-...
+```{r}
+glimpse(dn_lq_ak)
+```
+There are 6 observations and 11 variables. They are: address, city, state (denny's only), zip, longitude, latitude. All variables except for state are listed for both dennys and laquinta/ .
 
 ### Exercise 5
-
+We use the function mutate() to add a new variable to a data frame while keeping the existing variables.
 ...
+```{r}
+haversine <- function(long1, lat1, long2, lat2, round = 3) {
+  # convert to radians
+  long1 <- long1 * pi / 180
+  lat1 <- lat1 * pi / 180
+  long2 <- long2 * pi / 180
+  lat2 <- lat2 * pi / 180
+
+  R <- 6371 # Earth mean radius in km
+
+  a <- sin((lat2 - lat1) / 2)^2 + cos(lat1) * cos(lat2) * sin((long2 - long1) / 2)^2
+  d <- R * 2 * asin(sqrt(a))
+
+  return(round(d, round)) # distance in km
+}
+```
 
 ### Exercise 6
+```{r}
+dn_lq_ak <- dn_lq_ak %>%
+  mutate(distance = haversine(latitude.y, longitude.y, latitude.x, longitude.x, round=3))
 
-...
+```
 
-Add exercise headings as needed.
+### Excercise 7
+```{r}
+dn_lq_ak <- dn_lq_ak %>%
+  group_by(latitude.x, longitude.x) %>%
+  mutate(min_distance = min(distance, na.rm = TRUE)) %>%
+  ungroup()
+
+```
+
+
+
+
+
+
+
+
+
+
+
