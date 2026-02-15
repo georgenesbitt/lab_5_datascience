@@ -249,7 +249,7 @@ ggplot(dn_lq_nc %>% group_by(min_distance),
        aes(x = min_distance, y = 0)) +
   geom_point(size = .5) +
   labs(
-    title = "Nearest La Quinta distance for each Alaska Denny’s",
+    title = "Nearest La Quinta distance for each NC Denny’s",
     x = "Minimum distance to nearest La Quinta (km)")
 ```
 
@@ -259,3 +259,206 @@ of denny’s and their proximity to the closest laquintas. There is a
 pretty spread out distribution, especially from 0 to 100 kms. Unlike
 Alaska, there are denny’s way far away from any LaQuintas. The mean of
 the data is 48.33393 km and the SD is 45.07359 km.
+
+### Excercise 9
+
+``` r
+lq_tx <- laquinta %>%
+  filter(state == "TX")
+nrow(lq_tx)
+```
+
+    ## [1] 237
+
+``` r
+dn_tx <- dennys %>%
+  filter(state == "TX")
+nrow(dn_tx)
+```
+
+    ## [1] 200
+
+``` r
+dn_lq_tx <- full_join(dn_tx, lq_tx,
+  by = "state"
+)
+```
+
+    ## Warning in full_join(dn_tx, lq_tx, by = "state"): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 1 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
+
+``` r
+dn_lq_tx
+```
+
+    ## # A tibble: 47,400 × 11
+    ##    address.x    city.x state zip.x longitude.x latitude.x address.y city.y zip.y
+    ##    <chr>        <chr>  <chr> <chr>       <dbl>      <dbl> <chr>     <chr>  <chr>
+    ##  1 120 East I-… Abile… TX    79601       -99.6       32.4 3018 Cat… "\nAb… 79606
+    ##  2 120 East I-… Abile… TX    79601       -99.6       32.4 3501 Wes… "\nAb… 79601
+    ##  3 120 East I-… Abile… TX    79601       -99.6       32.4 14925 La… "\nAd… 75254
+    ##  4 120 East I-… Abile… TX    79601       -99.6       32.4 909 East… "\nAl… 78516
+    ##  5 120 East I-… Abile… TX    79601       -99.6       32.4 2400 Eas… "\nAl… 78332
+    ##  6 120 East I-… Abile… TX    79601       -99.6       32.4 1220 Nor… "\nAl… 75013
+    ##  7 120 East I-… Abile… TX    79601       -99.6       32.4 1165 Hwy… "\nAl… 76009
+    ##  8 120 East I-… Abile… TX    79601       -99.6       32.4 880 Sout… "\nAl… 77511
+    ##  9 120 East I-… Abile… TX    79601       -99.6       32.4 1708 Int… "\nAm… 79103
+    ## 10 120 East I-… Abile… TX    79601       -99.6       32.4 9305 Eas… "\nAm… 79118
+    ## # ℹ 47,390 more rows
+    ## # ℹ 2 more variables: longitude.y <dbl>, latitude.y <dbl>
+
+``` r
+dn_lq_tx <- dn_lq_tx %>%
+  mutate(distance = haversine(latitude.y, longitude.y, latitude.x, longitude.x, round=3))
+```
+
+``` r
+dn_lq_tx <- dn_lq_tx %>%
+  group_by(latitude.x, longitude.x) %>%
+  mutate(min_distance = min(distance, na.rm = TRUE)) %>%
+  ungroup()
+```
+
+``` r
+dn_lq_tx %>%
+  summarise(
+    n_dennys = n(),
+    mean = mean(min_distance, na.rm = TRUE),
+    sd = sd(min_distance, na.rm = TRUE),
+    median = median(min_distance, na.rm = TRUE),
+    iqr = IQR(min_distance, na.rm = TRUE),
+    min = min(min_distance, na.rm = TRUE),
+    max = max(min_distance, na.rm = TRUE)
+  )
+```
+
+    ## # A tibble: 1 × 7
+    ##   n_dennys  mean    sd median   iqr   min   max
+    ##      <int> <dbl> <dbl>  <dbl> <dbl> <dbl> <dbl>
+    ## 1    47400  2.74  4.84   1.49  2.47 0.005  51.6
+
+``` r
+ggplot(dn_lq_tx %>% group_by(min_distance),
+       aes(x = min_distance, y = 0)) +
+  geom_point(size = .5) +
+  labs(
+    title = "Nearest La Quinta distance for each Texas Denny’s",
+    x = "Minimum distance to nearest La Quinta (km)")
+```
+
+![](lab-05_files/figure-gfm/unnamed-chunk-21-1.png)<!-- --> The Texas
+one proves the Hedberg joke much more than the NC one and provides a
+greater range of data than the AK one. There are a vast majority of
+Denny’s with distances within 20 km of a La Quinta. There is one clear
+outlier past the 50 km mark. The mean is 2.73755 and the SD is 4.843115.
+
+### Excercise 11
+
+``` r
+lq_or <- laquinta %>%
+  filter(state == "OR")
+nrow(lq_or)
+```
+
+    ## [1] 10
+
+``` r
+dn_or <- dennys %>%
+  filter(state == "OR")
+nrow(dn_or)
+```
+
+    ## [1] 24
+
+``` r
+dn_lq_or <- full_join(dn_or, lq_or,
+  by = "state"
+)
+```
+
+    ## Warning in full_join(dn_or, lq_or, by = "state"): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 1 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
+
+``` r
+dn_lq_or
+```
+
+    ## # A tibble: 240 × 11
+    ##    address.x    city.x state zip.x longitude.x latitude.x address.y city.y zip.y
+    ##    <chr>        <chr>  <chr> <chr>       <dbl>      <dbl> <chr>     <chr>  <chr>
+    ##  1 3435 Se Spi… Albany OR    97321       -123.       44.6 61200 So… "\nBe… 97702
+    ##  2 3435 Se Spi… Albany OR    97321       -123.       44.6 1777 LaR… "\nCe… 97502
+    ##  3 3435 Se Spi… Albany OR    97321       -123.       44.6 155 Day … "\nEu… 97401
+    ##  4 3435 Se Spi… Albany OR    97321       -123.       44.6 243 Nort… "\nGr… 97526
+    ##  5 3435 Se Spi… Albany OR    97321       -123.       44.6 45 South… "\nNe… 97365
+    ##  6 3435 Se Spi… Albany OR    97321       -123.       44.6 11207 No… "\nPo… 97220
+    ##  7 3435 Se Spi… Albany OR    97321       -123.       44.6 4319 NW … "\nPo… 97210
+    ##  8 3435 Se Spi… Albany OR    97321       -123.       44.6 890 Hawt… "\nSa… 97301
+    ##  9 3435 Se Spi… Albany OR    97321       -123.       44.6 8815 Sou… "\nWi… 97070
+    ## 10 3435 Se Spi… Albany OR    97321       -123.       44.6 120 Arne… "\nWo… 97071
+    ## # ℹ 230 more rows
+    ## # ℹ 2 more variables: longitude.y <dbl>, latitude.y <dbl>
+
+``` r
+dn_lq_or <- dn_lq_or %>%
+  mutate(distance = haversine(latitude.y, longitude.y, latitude.x, longitude.x, round=3))
+```
+
+``` r
+dn_lq_or <- dn_lq_or %>%
+  group_by(latitude.x, longitude.x) %>%
+  mutate(min_distance = min(distance, na.rm = TRUE)) %>%
+  ungroup()
+```
+
+``` r
+dn_lq_or %>%
+  summarise(
+    n_dennys = n(),
+    mean = mean(min_distance, na.rm = TRUE),
+    sd = sd(min_distance, na.rm = TRUE),
+    median = median(min_distance, na.rm = TRUE),
+    iqr = IQR(min_distance, na.rm = TRUE),
+    min = min(min_distance, na.rm = TRUE),
+    max = max(min_distance, na.rm = TRUE)
+  )
+```
+
+    ## # A tibble: 1 × 7
+    ##   n_dennys  mean    sd median   iqr   min   max
+    ##      <int> <dbl> <dbl>  <dbl> <dbl> <dbl> <dbl>
+    ## 1      240  76.6  131.   9.32  62.2 0.115  486.
+
+``` r
+ggplot(dn_lq_or %>% group_by(min_distance),
+       aes(x = min_distance, y = 0)) +
+  geom_point(size = .5) +
+  labs(
+    title = "Nearest La Quinta distance for each Oregon Denny’s",
+    x = "Minimum distance to nearest La Quinta (km)")
+```
+
+![](lab-05_files/figure-gfm/unnamed-chunk-27-1.png)<!-- --> In this
+distribution, there is a large distribution of data points arranged
+between 0 and 50 km however there are 5 data points that are within the
+100-500km range with one even ranging all the way to what looks like
+480km distance.
+
+The mean is 76.60392 and the SD is 130.8993.
+
+### Excercise 12
+
+To me, I think from the data that I have seen, the correlation between
+Denny’s locations and LQ locations does not seem to be significant. I
+think that while there are certainly plenty, probably even the majority,
+of Denny’s locations that are within 5kms of a LaQuinta, I think you
+could probably say the exact same thing about mcdonalds and motel 6 or
+any other crappy hotel/fast food restraunt chain. There does not seem to
+be any credible statistical evidence that this is unique nor
+significant.
