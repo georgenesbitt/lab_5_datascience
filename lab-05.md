@@ -459,6 +459,8 @@ Denny’s locations and LQ locations does not seem to be significant. I
 think that while there are certainly plenty, probably even the majority,
 of Denny’s locations that are within 5kms of a LaQuinta, I think you
 could probably say the exact same thing about mcdonalds and motel 6 or
-any other crappy hotel/fast food restraunt chain. There does not seem to
-be any credible statistical evidence that this is unique nor
+any other crappy hotel/fast food restaraunt chain. There does not seem
+to be any credible statistical evidence that this is unique nor
 significant.
+
+### Excercise 13

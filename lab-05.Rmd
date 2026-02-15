@@ -282,5 +282,10 @@ In this distribution, there is a large distribution of data points arranged betw
 The mean is 76.60392 and the SD is	130.8993.
 
 ### Excercise 12
-To me, I think from the data that I have seen, the correlation between Denny's locations and LQ locations does not seem to be significant. I think that while there are certainly plenty, probably even the majority, of Denny's locations that are within 5kms of a LaQuinta, I think you could probably say the exact same thing about mcdonalds and motel 6 or any other crappy hotel/fast food restraunt chain. There does not seem to be any credible statistical evidence that this is unique nor significant. 
+To me, I think from the data that I have seen, the correlation between Denny's locations and LQ locations does not seem to be significant. I think that while there are certainly plenty, probably even the majority, of Denny's locations that are within 5kms of a LaQuinta, I think you could probably say the exact same thing about mcdonalds and motel 6 or any other crappy hotel/fast food restaraunt chain. There does not seem to be any credible statistical evidence that this is unique nor significant. 
+
+
+
+### Excercise 13
+
 
