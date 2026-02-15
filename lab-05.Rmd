@@ -89,11 +89,84 @@ dn_lq_ak <- dn_lq_ak %>%
 
 ```
 
+### Excercise 8
+```{r}
+dn_lq_ak %>%
+  summarise(
+    n_dennys = n(),
+    mean = mean(min_distance, na.rm = TRUE),
+    sd = sd(min_distance, na.rm = TRUE),
+    median = median(min_distance, na.rm = TRUE),
+    iqr = IQR(min_distance, na.rm = TRUE),
+    min = min(min_distance, na.rm = TRUE),
+    max = max(min_distance, na.rm = TRUE)
+  )
 
+```
+```{r}
+ggplot(dn_lq_ak %>% group_by(min_distance),
+       aes(x = min_distance, y = 0)) +
+  geom_point(size = 4) +
+  labs(
+    title = "Nearest La Quinta distance for each Alaska Denny’s",
+    x = "Minimum distance to nearest La Quinta (km)")
 
+```
+There are three Denny's which I have graphed above on a single planed line showing the minimum distance each location is to the nearest La Quinta. The mean distance is 9.145333 and the SD is 4.010.
 
+### Excercise 9
+```{r}
+lq_nc <- laquinta %>%
+  filter(state == "NC")
+nrow(lq_nc)
 
+dn_nc <- dennys %>%
+  filter(state == "NC")
+nrow(dn_nc)
+```
+```{r}
+dn_lq_nc <- full_join(dn_nc, lq_nc,
+  by = "state"
+)
+dn_lq_nc
+```
+```{r}
+dn_lq_nc <- dn_lq_nc %>%
+  mutate(distance = haversine(latitude.y, longitude.y, latitude.x, longitude.x, round=3))
 
+```
+```{r}
+dn_lq_nc <- dn_lq_nc %>%
+  group_by(latitude.x, longitude.x) %>%
+  mutate(min_distance = min(distance, na.rm = TRUE)) %>%
+  ungroup()
+
+```
+
+```{r}
+dn_lq_nc %>%
+  summarise(
+    n_dennys = n(),
+    mean = mean(min_distance, na.rm = TRUE),
+    sd = sd(min_distance, na.rm = TRUE),
+    median = median(min_distance, na.rm = TRUE),
+    iqr = IQR(min_distance, na.rm = TRUE),
+    min = min(min_distance, na.rm = TRUE),
+    max = max(min_distance, na.rm = TRUE)
+  )
+
+```
+
+```{r}
+ggplot(dn_lq_nc %>% group_by(min_distance),
+       aes(x = min_distance, y = 0)) +
+  geom_point(size = .5) +
+  labs(
+    title = "Nearest La Quinta distance for each Alaska Denny’s",
+    x = "Minimum distance to nearest La Quinta (km)")
+
+```
+Above you can see the distribution of all 336 (lol wsnc zip area code) locations of denny's and their proximity to the closest laquintas. There is a pretty spread out distribution, especially from 0 to 100 kms. Unlike Alaska, there are denny's way far away from any LaQuintas. The mean of the data is 48.33393	km and the SD is 45.07359	km.
 
 
 
